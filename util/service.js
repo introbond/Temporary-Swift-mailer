@@ -37,14 +37,16 @@ exports.sentEmail = async () => {
         subject: "Backend interview: Puritat Chamart",
         text: `Dear Team
             As a coding interview, here is the result of testing no 4.
-            Thanks for reading,
-            James Bond`
+            Thanks for reading.
+
+            Regard,
+            Puritat Chamart`
     };
     
     await transporter.sendMail(info, (error, success) => {
         if (error) {
             console.log(error)
             res.status(500).send(error)
-        }
-    })
-}
+        };
+    });
+};
