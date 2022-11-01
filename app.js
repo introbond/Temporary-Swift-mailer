@@ -28,12 +28,12 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/approve", async (req, res) => {
-    const {id, name, approve_status} = req.body;
-    console.log(req.body);
-    const users = await service.getUser();
-    const existingUser = users.find(user => user.id === id);
-    console.log(existingUser);
-    //res.send('approve successfully');
+    const userApprove = await service.approve(req, res);
+    
+    res.json({
+        sucess: true,
+        userApprove: userApprove
+    });
 });
 
 module.exports = app;

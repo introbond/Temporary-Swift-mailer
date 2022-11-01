@@ -1,4 +1,5 @@
 const axios = require('axios');
+
 exports.getUser = (async (req, res) => {
     try {
         const response = await axios.get('https://script.google.com/macros/s/AKfycbzuE4HExzdaIyEqETAcenS9VVaQ1YIbxQjBzAo93lQeSf8ZbhTujHXNCUd1CQcMFp2-DQ/exec?action=readData');
@@ -8,14 +9,17 @@ exports.getUser = (async (req, res) => {
         res.status(500).send('server internal error');
     };
 });
+
 exports.approve = (async (req, res) => {
-    try {
-        const response = await axios.post('https://script.google.com/macros/s/AKfycbzuE4HExzdaIyEqETAcenS9VVaQ1YIbxQjBzAo93lQeSf8ZbhTujHXNCUd1CQcMFp2-DQ/exec?action=approve');
-        return response.data;
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('server internal error');
-    };
+    axios.post('https://script.google.com/macros/s/AKfycbzuE4HExzdaIyEqETAcenS9VVaQ1YIbxQjBzAo93lQeSf8ZbhTujHXNCUd1CQcMFp2-DQ/exec?action=approve', {
+        id: req.body.id
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 });
 
 const nodemailer = require("nodemailer");
