@@ -2,8 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-const nodemailer = require("nodemailer");
 const service = require('./util/service');
+const bcrypt = require('bcryptjs');
 
 app.set('view engine', 'ejs');
 app.use(express.json());
@@ -21,13 +21,10 @@ app.post("/login", async (req, res) => {
     if (!existingUser) {
         res.status(400).send('no user in database');
     };
-    if (existingUser.password !== password) {
+    if (!await bcrypt.compare(password, existingUser.password)) {
         res.status(400).send('incorrect password');
     };
-    res.status(200).json({
-        success: true,
-        user: existingUser
-    });
+    res.render('approve', { existingUser });
 });
 
 module.exports = app;
