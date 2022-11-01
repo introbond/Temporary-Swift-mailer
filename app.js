@@ -28,12 +28,19 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/approve", async (req, res) => {
+    const { id, name, approve_status } = req.body;
     const userApprove = await service.approve(req, res);
-    
-    res.json({
-        sucess: true,
-        userApprove: userApprove
-    });
+    const users = await service.getUser();
+    const approve = users.find(user => user.approve_status === false);
+    if (!approve) {
+        console.log('sent success');
+        res.status(201).send('sent email successfully');
+    } else {
+        res.status(201).json({
+            success: true,
+            message: "wait for another approval"
+        });
+    };
 });
 
 module.exports = app;

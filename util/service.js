@@ -15,7 +15,7 @@ exports.approve = (async (req, res) => {
         id: req.body.id
       })
       .then(function (response) {
-        console.log(response);
+        //console.log(response);
       })
       .catch(function (error) {
         console.log(error);
