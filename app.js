@@ -29,7 +29,7 @@ app.post("/login", async (req, res) => {
 
 app.post("/approve", async (req, res) => {
     const { id, name, approve_status } = req.body;
-    const userApprove = await service.approve(req, res);
+    await service.approve(req, res);
     const users = await service.getUser();
     const approve = users.find(user => user.approve_status === false);
     if (!approve) {

@@ -31,7 +31,7 @@ exports.sentEmail = async () => {
         pass: process.env.NODE_MAILER_PASSWORD,
     }});
     
-    let info = await transporter.sendMail({
+    let info = {
         from: '"introbond.node@gmail.com',
         to: "introbond.dev@gmail.com",
         subject: "Backend interview: Puritat Chamart",
@@ -39,9 +39,9 @@ exports.sentEmail = async () => {
             As a coding interview, here is the result of testing no 4.
             Thanks for reading,
             James Bond`
-    });
+    };
     
-    transporter.sendMail(info, (error, success) => {
+    await transporter.sendMail(info, (error, success) => {
         if (error) {
             console.log(error)
             res.status(500).send(error)
