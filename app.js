@@ -33,7 +33,7 @@ app.post("/approve", async (req, res) => {
     const users = await service.getUser();
     const approve = users.find(user => user.approve_status === false);
     if (!approve) {
-        console.log('sent success');
+        await service.sentEmail();
         res.status(201).send('sent email successfully');
     } else {
         res.status(201).json({
