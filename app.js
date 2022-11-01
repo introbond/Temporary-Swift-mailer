@@ -24,7 +24,16 @@ app.post("/login", async (req, res) => {
     if (!await bcrypt.compare(password, existingUser.password)) {
         res.status(400).send('incorrect password');
     };
-    res.render('approve', { existingUser });
+    res.render('approve',  { loggedinID : existingUser.id , loggedinName : existingUser.name, loggedinApproveStatus: existingUser.approve_status} );
+});
+
+app.post("/approve", async (req, res) => {
+    const {id, name, approve_status} = req.body;
+    console.log(req.body);
+    const users = await service.getUser();
+    const existingUser = users.find(user => user.id === id);
+    console.log(existingUser);
+    //res.send('approve successfully');
 });
 
 module.exports = app;
