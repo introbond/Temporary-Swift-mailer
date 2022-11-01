@@ -11,42 +11,46 @@ exports.getUser = (async (req, res) => {
 });
 
 exports.approve = (async (req, res) => {
-    axios.post('https://script.google.com/macros/s/AKfycbzuE4HExzdaIyEqETAcenS9VVaQ1YIbxQjBzAo93lQeSf8ZbhTujHXNCUd1CQcMFp2-DQ/exec?action=approve', {
+    try {
+        await axios.post('https://script.google.com/macros/s/AKfycbzuE4HExzdaIyEqETAcenS9VVaQ1YIbxQjBzAo93lQeSf8ZbhTujHXNCUd1CQcMFp2-DQ/exec?action=approve', {
         id: req.body.id
-      })
-      .then(function (response) {
-        //console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    })
+        return true;
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('server internal error');
+    };    
+
 });
 
 const nodemailer = require("nodemailer");
 exports.sentEmail = async () => {
-    let transporter = nodemailer.createTransport({
+    const mailList = [
+  'introbond.dev@gmail.com',
+  'napat.s@swiftdynamics.co.th'];
+    try {
+            let transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
         user: "introbond.node@gmail.com",
         pass: process.env.NODE_MAILER_PASSWORD,
     }});
     
-    let info = {
+    let info = await transporter.sendMail({
         from: '"introbond.node@gmail.com',
-        to: "introbond.dev@gmail.com",
+        to: mailList,
         subject: "Backend interview: Puritat Chamart",
-        text: `Dear Team
+        text: `Dear Team (From nodejs)
             As a coding interview, here is the result of testing no 4.
             Thanks for reading.
 
             Regard,
             Puritat Chamart`
-    };
-    
-    await transporter.sendMail(info, (error, success) => {
-        if (error) {
-            console.log(error)
-            res.status(500).send(error)
-        };
     });
+     console.log("Message sent: %s", info.messageId);
+    return true
+    } catch (error) {
+        console.log(error)
+        return false
+    }
 };

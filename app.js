@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 })
 
 app.post("/login", async (req, res) => {
-    const {id, password} = req.body;
+    const { id, password } = req.body;
     const users = await service.getUser();
     const existingUser = users.find(user => user.id === id);
     if (!existingUser) {
@@ -24,23 +24,20 @@ app.post("/login", async (req, res) => {
     if (!await bcrypt.compare(password, existingUser.password)) {
         res.status(400).send('incorrect password');
     };
-    res.render('approve',  { loggedinID : existingUser.id , loggedinName : existingUser.name, loggedinApproveStatus: existingUser.approve_status} );
+    res.render('approve', { loggedinID: existingUser.id, loggedinName: existingUser.name, loggedinApproveStatus: existingUser.approve_status });
 });
 
 app.post("/approve", async (req, res) => {
     const { id, name, approve_status } = req.body;
     await service.approve(req, res);
     const users = await service.getUser();
-    const approve = users.find(user => user.approve_status === false);
-    if (!await approve) {
-        await service.sentEmail();
-        res.status(201).send('sent email successfully');
-    } else {
-        res.status(201).json({
-            success: true,
-            message: "wait for another approval"
-        });
+    const notApprove = await users.find(user => user.approve_status == false);
+    console.log(typeof notApprove);
+    if (!(typeof notApprove === "undefined")) {
+        return res.send("wait for another approval");
     };
+    await service.sentEmail();
+    res.status(201).send("sent email successfully");
 });
 
 module.exports = app;
