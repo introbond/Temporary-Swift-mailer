@@ -26,15 +26,16 @@ exports.approve = (async (req, res) => {
 const nodemailer = require("nodemailer");
 exports.sentEmail = async () => {
     const mailList = [
-  'introbond.dev@gmail.com',
-  'napat.s@swiftdynamics.co.th'];
+        'introbond.dev@gmail.com',
+        'napat.s@swiftdynamics.co.th'];
     try {
-            let transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-        user: "introbond.node@gmail.com",
-        pass: process.env.NODE_MAILER_PASSWORD,
-    }});
+        let transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: "introbond.node@gmail.com",
+                pass: process.env.NODE_MAILER_PASSWORD,
+            }
+    });
     
     let info = await transporter.sendMail({
         from: '"introbond.node@gmail.com',
@@ -47,7 +48,7 @@ exports.sentEmail = async () => {
             Regard,
             Puritat Chamart`
     });
-     console.log("Message sent: %s", info.messageId);
+    console.log("Message sent: %s", info.messageId);
     return true
     } catch (error) {
         console.log(error)
